@@ -2,39 +2,114 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Gireesh V Pai</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+          href="style.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 </head>
 
 <body>
 
-    <!-- Canvas for particles -->
-    <canvas id="particleCanvas"></canvas>
+    <!-- Animated Background -->
 
-    <!-- Profile Card -->
-    <div class="hero">
+    <div class="gradient-bg"></div>
 
-        <div class="profile-wrapper">
-            <img src="assets/profile.png" alt="Gireesh">
+    <!-- Particle Canvas -->
+
+    <canvas id="particles"></canvas>
+
+    <!-- Main Hero -->
+
+    <main class="hero">
+
+        <div class="card">
+
+            <div class="profile-container">
+
+                <div class="ring"></div>
+
+                <img src="profile.png"
+                     alt="Gireesh"
+                     class="profile">
+
+            </div>
+
+            <h1>
+
+                Gireesh V Pai
+
+            </h1>
+
+            <h2>
+
+                Software Engineer in Progress
+
+            </h2>
+
+            <p>
+
+                B.Tech Computer Science
+
+                <br>
+
+                MIT Manipal
+
+            </p>
+
+            <div class="skills">
+
+                <span>Java</span>
+
+                <span>C++</span>
+
+                <span>Python</span>
+
+                <span>AI</span>
+
+                <span>DSA</span>
+
+            </div>
+
+            <div class="buttons">
+
+                <a href="https://github.com/gireeshvpai2007-maker"
+                   target="_blank">
+
+                    GitHub
+
+                </a>
+
+                <a href="https://www.linkedin.com/"
+                   target="_blank">
+
+                    LinkedIn
+
+                </a>
+
+            </div>
+
         </div>
 
-        <h1>Gireesh V Pai</h1>
+    </main>
 
-        <p>
-            B.Tech Computer Science • MIT Manipal
-        </p>
-
-        <p class="subtitle">
-            Software Engineering • AI • Data Structures
-        </p>
-
-    </div>
-
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 
