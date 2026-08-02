@@ -1,89 +1,120 @@
 // ===============================
-// PARTICLE INTRO
-// Gireesh V Pai
+// Gireesh Portfolio Particle Engine
 // ===============================
 
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
 let particles = [];
-let mouse = {
-    x: null,
-    y: null,
-    radius: 140
+
+const mouse = {
+    x: undefined,
+    y: undefined,
+    radius: 160
 };
 
+// ===============================
+// Canvas Resize
+// ===============================
+
 function resizeCanvas() {
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
 }
 
 resizeCanvas();
 
 window.addEventListener("resize", () => {
+
     resizeCanvas();
-    initParticles();
+
+    createParticles();
+
 });
+
+// ===============================
+// Retina Support
+// ===============================
+
+const dpr = window.devicePixelRatio || 1;
+
+canvas.width = window.innerWidth * dpr;
+canvas.height = window.innerHeight * dpr;
+
+ctx.scale(dpr, dpr);
+
+canvas.style.width = window.innerWidth + "px";
+canvas.style.height = window.innerHeight + "px";
 
 // ===============================
 // Mouse
 // ===============================
 
-window.addEventListener("mousemove", (e) => {
+window.addEventListener("mousemove", e => {
+
     mouse.x = e.clientX;
     mouse.y = e.clientY;
+
 });
 
 window.addEventListener("mouseleave", () => {
-    mouse.x = null;
-    mouse.y = null;
+
+    mouse.x = undefined;
+    mouse.y = undefined;
+
 });
 
 // ===============================
-// Particle Class
+// Particle
 // ===============================
 
 class Particle {
 
     constructor() {
 
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
 
         this.size = Math.random() * 2 + 1;
 
-        this.speedX = (Math.random() - 0.5) * 0.6;
-        this.speedY = (Math.random() - 0.5) * 0.6;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
 
-        this.opacity = Math.random() * 0.5 + 0.3;
     }
 
     update() {
 
-        this.x += this.speedX;
-        this.y += this.speedY;
+        this.x += this.vx;
+        this.y += this.vy;
 
-        // Bounce from edges
-        if (this.x <= 0 || this.x >= canvas.width)
-            this.speedX *= -1;
+        // Bounce
 
-        if (this.y <= 0 || this.y >= canvas.height)
-            this.speedY *= -1;
+        if (this.x < 0 || this.x > window.innerWidth)
+            this.vx *= -1;
 
-        // Mouse interaction
-        if (mouse.x !== null) {
+        if (this.y < 0 || this.y > window.innerHeight)
+            this.vy *= -1;
 
-            let dx = this.x - mouse.x;
-            let dy = this.y - mouse.y;
+        // Mouse repel
 
-            let distance = Math.sqrt(dx * dx + dy * dy);
+        if (mouse.x !== undefined) {
 
-            if (distance < mouse.radius) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < mouse.radius) {
 
                 this.x += dx / 18;
                 this.y += dy / 18;
+
             }
+
         }
+
     }
 
     draw() {
@@ -91,74 +122,90 @@ class Particle {
         ctx.beginPath();
 
         ctx.arc(
+
             this.x,
             this.y,
             this.size,
             0,
             Math.PI * 2
+
         );
 
-        ctx.fillStyle =
-            `rgba(125,211,252,${this.opacity})`;
+        ctx.fillStyle = "rgba(125,211,252,0.9)";
+
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#38bdf8";
 
         ctx.fill();
+
     }
+
 }
 
 // ===============================
-// Initialize
+// Create Particles
 // ===============================
 
-function initParticles() {
+function createParticles() {
 
     particles = [];
 
-    let count = Math.floor((canvas.width * canvas.height) / 12000);
+    const count = Math.floor(
+
+        (window.innerWidth * window.innerHeight) / 12000
+
+    );
 
     for (let i = 0; i < count; i++) {
 
-        particles.push(new Particle());
+        particles.push(
+
+            new Particle()
+
+        );
 
     }
 
 }
 
-initParticles();
+createParticles();
 
 // ===============================
-// Connections
+// Draw Connections
 // ===============================
 
 function connectParticles() {
 
-    for (let a = 0; a < particles.length; a++) {
+    for (let i = 0; i < particles.length; i++) {
 
-        for (let b = a + 1; b < particles.length; b++) {
+        for (let j = i + 1; j < particles.length; j++) {
 
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
 
-            let distance = dx * dx + dy * dy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 120 * 120) {
-
-                let opacity = 1 - distance / (120 * 120);
-
-                ctx.strokeStyle =
-                    `rgba(125,211,252,${opacity * 0.25})`;
-
-                ctx.lineWidth = 1;
+            if (dist < 130) {
 
                 ctx.beginPath();
 
+                ctx.strokeStyle =
+                    `rgba(125,211,252,${1 - dist / 130})`;
+
+                ctx.lineWidth = 0.7;
+
                 ctx.moveTo(
-                    particles[a].x,
-                    particles[a].y
+
+                    particles[i].x,
+                    particles[i].y
+
                 );
 
                 ctx.lineTo(
-                    particles[b].x,
-                    particles[b].y
+
+                    particles[j].x,
+                    particles[j].y
+
                 );
 
                 ctx.stroke();
@@ -178,13 +225,15 @@ function connectParticles() {
 function animate() {
 
     ctx.clearRect(
+
         0,
         0,
-        canvas.width,
-        canvas.height
+        window.innerWidth,
+        window.innerHeight
+
     );
 
-    for (let particle of particles) {
+    for (const particle of particles) {
 
         particle.update();
 
@@ -194,7 +243,11 @@ function animate() {
 
     connectParticles();
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(
+
+        animate
+
+    );
 
 }
 
